@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 """
+AirBnB project
 """
 
 import models
@@ -8,6 +9,7 @@ from uuid import uuid4
 
 class BaseModel:
 	"""
+	defines all common attributes/methods for other classes
 	"""
 	def __init__(self):
 		"""
@@ -18,12 +20,14 @@ class BaseModel:
 
 	def save(self):
 		"""
+		updates the public instance attribute updated_at with the current datetime
 		"""
 
 		self.updated_at = datetime.utcnow()
 
 	def to_dict(self):
 		"""
+		returns a dictionary containing all keys/values of __dict__ of the instanc
 		"""
 		i_dict = self.__dict__.copy()
 		i_dict["__class__"] = self.__class__.__name__
@@ -34,5 +38,6 @@ class BaseModel:
 
 	def __str__(self):
 		"""
+		return the required format
 		"""
 		return "[{}] ({}) {}".format(self.__class__.__name__, self.id, self.__dict__)
