@@ -11,12 +11,23 @@ class BaseModel:
 	"""
 	defines all common attributes/methods for other classes
 	"""
-	def __init__(self):
+	def __init__(self, *args, **kwargs):
 		"""
+		initializes the BaseModel
 		"""
-		self.id = str(uuid4)
-		self.created_at = datetime.utcnow()
-		self.updated_at = datetime.utcnow()
+		date_time_format = "%Y-%m-%dT%H:%M:%S.%f"
+		if kwargs:
+			for key, value in kwargs.items():
+				if key == "__class__":
+					continue
+				elif key == "created_at" | key == "updated_at":
+					setattr(self, key, datetime.strptime(value, date_time_format))
+				else:
+					setattr(self, key, value)
+		else:
+			self.id = str(uuid4())
+			self.created_at = datetime.utcnow()
+			self.updated_at = datetime.utcnow()
 
 	def save(self):
 		"""
