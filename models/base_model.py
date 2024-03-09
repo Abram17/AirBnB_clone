@@ -1,9 +1,8 @@
 #!/usr/bin/python3
 """
-AirBnB project
+contains the BaseModel class
 """
 
-import models
 from datetime import datetime
 from uuid import uuid4
 
@@ -11,23 +10,27 @@ class BaseModel:
 	"""
 	defines all common attributes/methods for other classes
 	"""
+
 	def __init__(self, *args, **kwargs):
 		"""
-		initializes the BaseModel
+		initilizes BaseModel
 		"""
-		date_time_format = "%Y-%m-%dT%H:%M:%S.%f"
-		if kwargs:
+
+		time = "%Y-%m-%dT%H:%M:%S.%f"
+
+		if kwargs is None and kwargs == {}:
+			self.id = str(uuid4)
+			self.created_at = datetime.utcnow()
+			self.updated_at = datetime.utcnow()
+
+		else:
 			for key, value in kwargs.items():
 				if key == "__class__":
 					continue
-				elif key == "created_at" | key == "updated_at":
-					setattr(self, key, datetime.strptime(value, date_time_format))
+				elif key == "updated_at" | key == "created_at":
+					setattr(self, key, datetime.strptime(value, time))
 				else:
 					setattr(self, key, value)
-		else:
-			self.id = str(uuid4())
-			self.created_at = datetime.utcnow()
-			self.updated_at = datetime.utcnow()
 
 	def save(self):
 		"""
@@ -38,17 +41,20 @@ class BaseModel:
 
 	def to_dict(self):
 		"""
-		returns a dictionary containing all keys/values of __dict__ of the instanc
+		returns a dictionary containing all keys/values of __dict__ of the instance
 		"""
-		i_dict = self.__dict__.copy()
-		i_dict["__class__"] = self.__class__.__name__
-		i_dict["created_at"] = self.created_at.isoformat()
-		i_dict["updated_at"] = self.updated_at.isoformat()
 
-		return i_dict
+		this_dict = self.__dict__.copy()
+		this_dict["__class__"] = self.__class__.__name__
+		this_dict["created_at"] = self.created_at.isoformat()
+		this_dict["updated_at"] = self.updated_at.isoformat()
+
+		return this_dict
 
 	def __str__(self):
 		"""
-		return the required format
+		print: [<class name>] (<self.id>) <self.__dict__>
 		"""
-		return "[{}] ({}) {}".format(self.__class__.__name__, self.id, self.__dict__)
+
+		return "[{}] ({}) {}"\
+			.format(self.__class__.__name__, self.id, self.__dict__)

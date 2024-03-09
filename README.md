@@ -1,3 +1,2 @@
-AirBnB project
-
-Having Fun !
+This is Air BnB clone project
+by Abram
