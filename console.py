@@ -4,14 +4,42 @@ contains the entry point of the command interpreter
 """
 import cmd
 import re
+import sys
 from models import storage
-from models.base_model import BaseModel
 
 class HBNBCommand(cmd.Cmd):
 	"""
 	command line interpreter class
 	"""
 	prompt = "(hbnb)"
+
+	def precmd(self, line):
+		"""
+		non-interactive mode
+		"""
+		if not sys.stdin.isatty():
+			print()
+		checks = re.search(r"^(\w*)\.(\w+)(?:\(([^)]*)\))$", line)
+		if checks:
+			class_name = checks.group(1)
+			command = checks.group(2)
+			args = checks.group(3)
+
+			if args is None:
+				line = f"{command} {class_name}"
+				return ''
+			else:
+				args_checks = re.search(r"^\"([^\"]*)\"(?:, (.*))?$", args)
+				instance_id = args_checks[1]
+
+				if args_checks.group(2) is None:
+					line = f"{command} {class_name} {instance_id}"
+				else:
+					attribute_part = args_checks.group(2)
+					line = f"{command} {class_name} {instance_id} \
+{attribute_part}"
+				return ''
+		return cmd.Cmd.precmd(self, line)
 
 	def do_quit(self, arg):
 		"""
