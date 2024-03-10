@@ -6,6 +6,7 @@ contains the FileStorage class
 import json
 import os
 from datetime import datetime
+from models.base_model import BaseModel
 
 class FileStorage:
 	"""
@@ -32,23 +33,29 @@ class FileStorage:
 		"""
 		serializes __objects to the JSON file (path: __file_path)
 		"""
-		with open(FileStorage.__file_path, "w", encoding = "utf-8") as file:
-			j = {key: value.to_dict() for key, value in FileStorage.__objects.items()}
-			json.dump(j, file)
+		object_dict = {}
+
+		for key in self.__objects.keys():
+			if type(self.__objects[key]) != dict:
+				object_dict[key] = self.__objects[key].to_dict()
+		file_name = self.__file_path
+		with open(file_name, "w", encoding="utf-8") as jsonfile:
+			jsonfile.write(json.dumps(object_dict))
 
 	def reload(self):
 		"""
-		deserializes the JSON file to __objects
+		Reloads the stored objects
 		"""
-		if os.path.isfile(FileStorage.__file_path):
-			with open(FileStorage.__file_path, "r", encoding="utf-8") as file:
-				obj_dict = json.load(file)
-				try:
-					obj_dict = {key: self.existing()[value["__class__"]](**value)\
-					for key, value in obj_dict.items()}
-					FileStorage.__objects = obj_dict
-				except Exception:
-					pass
+		if os.path.exists(FileStorage.__file_path):
+			with open(FileStorage.__file_path, "r", encoding="utf-8") \
+					as my_file:
+				obj_dict = json.loads(my_file.read())
+			final_dict = {}
+
+			for id, dictionary in obj_dict.items():
+				class_name = dictionary['__class__']
+				final_dict[id] = self.existing()[class_name](**dictionary)
+			FileStorage.__objects = final_dict
 
 	def existing(self):
 		"""
