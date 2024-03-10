@@ -15,6 +15,10 @@ class BaseModel:
 	def __init__(self, *args, **kwargs):
 		"""
 		initilizes BaseModel
+
+		Args:
+			_*args: arguments
+			_**kwargs: key values of args
 		"""
 
 		time = "%Y-%m-%dT%H:%M:%S.%f"
@@ -38,8 +42,8 @@ class BaseModel:
 		"""
 		updates the public instance attribute updated_at with the current datetime
 		"""
-		storage.save()
 		self.updated_at = datetime.utcnow()
+		storage.save()
 
 	def to_dict(self):
 		"""
@@ -47,9 +51,9 @@ class BaseModel:
 		"""
 
 		this_dict = self.__dict__.copy()
-		this_dict["__class__"] = self.__class__.__name__
-		this_dict["created_at"] = self.created_at.isoformat()
-		this_dict["updated_at"] = self.updated_at.isoformat()
+		this_dict["__class__"] = type(self).__name__
+		this_dict["created_at"] = this_dict["created_at"].isoformat()
+		this_dict["updated_at"] = this_dict["updated_at"].isoformat()
 
 		return this_dict
 
@@ -58,5 +62,5 @@ class BaseModel:
 		print: [<class name>] (<self.id>) <self.__dict__>
 		"""
 
-		return "[{}] ({}) {}"\
-			.format(self.__class__.__name__, self.id, self.__dict__)
+		return "[{}] ({}) {}".\
+			format(type(self).__name__, self.id, self.__dict__)
