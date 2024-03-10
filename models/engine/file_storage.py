@@ -5,7 +5,7 @@ contains the FileStorage class
 
 import json
 import os
-from models.base_model import BaseModel
+from datetime import datetime
 
 class FileStorage:
 	"""
@@ -44,7 +44,7 @@ class FileStorage:
 			with open(FileStorage.__file_path, "r", encoding="utf-8") as file:
 				obj_dict = json.load(file)
 				try:
-					obj_dict = {key: self.classes()[value["__class__"]](**value)\
+					obj_dict = {key: self.existing()[value["__class__"]](**value)\
 					for key, value in obj_dict.items()}
 					FileStorage.__objects = obj_dict
 				except Exception:
@@ -74,3 +74,43 @@ class FileStorage:
 		}
 
 		return existing
+
+	def attributes(self):
+		"""
+		Contains the valid attributes
+		"""
+		attributes = {
+			"BaseModel":
+				{"id": str,
+				"created_at": datetime,
+				"updated_at": datetime},
+			"User":
+				{"email": str,
+				"password": str,
+				"first_name": str,
+				"last_name": str},
+			"State":
+				{"name": str},
+			"City":
+				{"state_id": str,
+				"name": str},
+			"Amenity":
+				{"name": str},
+			"Place":
+				{"city_id": str,
+				"user_id": str,
+				"name": str,
+				"description": str,
+				"number_rooms": int,
+				"number_bathrooms": int,
+				"max_guest": int,
+				"price_by_night": int,
+				"latitude": float,
+				"longitude": float,
+				"amenity_ids": list},
+			"Review":
+				{"place_id": str,
+				"user_id": str,
+				"text": str}
+		}
+		return attributes

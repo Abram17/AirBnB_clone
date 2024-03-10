@@ -5,6 +5,7 @@ contains the BaseModel class
 
 from datetime import datetime
 from uuid import uuid4
+from models import storage
 
 class BaseModel:
 	"""
@@ -22,6 +23,7 @@ class BaseModel:
 			self.id = str(uuid4)
 			self.created_at = datetime.utcnow()
 			self.updated_at = datetime.utcnow()
+			storage.new(self)
 
 		else:
 			for key, value in kwargs.items():
@@ -36,7 +38,7 @@ class BaseModel:
 		"""
 		updates the public instance attribute updated_at with the current datetime
 		"""
-
+		storage.save()
 		self.updated_at = datetime.utcnow()
 
 	def to_dict(self):
