@@ -1,9 +1,6 @@
 #!/usr/bin/python3
-"""Defines unittests for models/engine/file_storage.py.
-
-Unittest classes:
-	TestFileStorage_instantiation
-	TestFileStorage_methods
+"""
+unittests for models/engine/file_storage.py.
 """
 import os
 import json
@@ -33,10 +30,10 @@ class TestFileStorage_instantiation(unittest.TestCase):
 			FileStorage(None)
 
 	def test_FileStorage_file_path_is_private_str(self):
-		self.assertEqual(str, type(FileStorage._FileStorage__file_path))
+		self.assertEqual(str, type(FileStorage.__file_path))
 
 	def testFileStorage_objects_is_private_dict(self):
-		self.assertEqual(dict, type(FileStorage._FileStorage__objects))
+		self.assertEqual(dict, type(FileStorage.__objects))
 
 	def test_storage_initializes(self):
 		self.assertEqual(type(models.storage), FileStorage)
