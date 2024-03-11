@@ -38,3 +38,17 @@ class BaseModel:
         print: [<class name>] (<self.id>) <self.__dict__>
         """
         return f"[{self.__class__.__name__}] ({self.id}) {self.__dict__}"
+
+
+if __name__ == "__main__":
+    new_model = BaseModel()
+    new_model.name = "New Model"
+    new_model.num = 7
+    print(new_model)
+    new_model.save()
+    print(new_model)
+    new_model_json = new_model.to_dict()
+    print(new_model_json)
+    print("json of this model:")
+    for key in new_model_json.keys():
+        print(f"\t{key}: ({type(new_model_json[key])}) - {new_model_json[key]}")
