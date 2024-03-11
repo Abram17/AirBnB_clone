@@ -24,7 +24,7 @@ class BaseModel():
 
         time = "%Y-%m-%dT%H:%M:%S.%f"
 
-        if kwargs is None and kwargs == {}:
+        if kwargs is None | kwargs == {}:
             self.id = str(uuid4)
             self.created_at = datetime.now()
             self.updated_at = datetime.now()
