@@ -11,11 +11,7 @@ class BaseModel:
         """
         initilizes the BaseModel
         """
-        if not kwargs:
-            self.id = str(uuid4())
-            self.created_at = datetime.utcnow()
-            self.updated_at = datetime.utcnow()
-        else:
+        if kwargs:
             for k, v in kwargs.items():
                 if k == "__class__":
                     continue
@@ -24,6 +20,11 @@ class BaseModel:
                             datetime.strptime(v, "%Y-%m-%dT%H:%M:%S.%f"))
                 else:
                     setattr(self, k, v)
+        else:
+            self.id = str(uuid4())
+            self.created_at = datetime.utcnow()
+            self.updated_at = datetime.utcnow()
+
 
     def save(self):
         """
