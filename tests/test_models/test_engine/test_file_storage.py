@@ -58,6 +58,7 @@ class TestFileStorage(unittest.TestCase):
     def test_save(self):
         new_model = BaseModel()
         models.storage.new(new_model)
+        models.storage.save()
         saved = ""
         with open("file.json", "r") as f:
             saved = f.read()
