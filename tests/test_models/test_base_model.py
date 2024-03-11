@@ -25,8 +25,10 @@ class TestBaseModel(unittest.TestCase):
         self.assertIsInstance(new_model_d, dict)
         self.assertEqual(new_model_d["__class__"], "BaseModel")
         self.assertEqual(new_model_d["id"], new_model.id)
-        self.assertEqual(new_model_d["created_at"], new_model.created_at.isoformat())
-        self.assertEqual(new_model_d["updated_at"], new_model.updated_at.isoformat())
+        self.assertEqual(new_model_d["created_at"],
+                         new_model.created_at.isoformat())
+        self.assertEqual(new_model_d["updated_at"],
+                         new_model.updated_at.isoformat())
 
     def test_str(self):
         new_model = BaseModel()
