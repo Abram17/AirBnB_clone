@@ -11,7 +11,7 @@ class BaseModel:
         """
         initilizes the BaseModel
         """
-        self.id = str(uuid4)
+        self.id = str(uuid4())
         self.created_at = datetime.utcnow()
         self.updated_at = datetime.utcnow()
 
@@ -28,8 +28,8 @@ class BaseModel:
         """
         this_dict = self.__dict__.copy()
         this_dict[__class__] = self.__class__.__name__
-        this_dict["created_at"] = self.created_at.isoformat("%Y-%m-%dT%H:%M:%S.%f")
-        this_dict["updated_at"] = self.updated_at.isoformat("%Y-%m-%dT%H:%M:%S.%f")
+        this_dict["created_at"] = self.created_at.isoformat()
+        this_dict["updated_at"] = self.updated_at.isoformat()
 
         return this_dict
 
