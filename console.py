@@ -6,6 +6,7 @@ import cmd
 import shlex
 from models import storage
 from models.base_model import BaseModel
+from models.user import User
 
 
 class HBNBCommand(cmd.Cmd):
@@ -13,7 +14,7 @@ class HBNBCommand(cmd.Cmd):
     class for the HBNBC cmd
     """
     prompt = "(hbnb)"
-    Existing = ["BaseModel"]
+    Existing = ["BaseModel", "User"]
 
     def do_quit(self, args):
         """
@@ -51,8 +52,8 @@ class HBNBCommand(cmd.Cmd):
         elif cmds[0] not in self.Existing:
             print("** class doesn't exist **")
         else:
-            new = BaseModel()
-            new.save()
+            new = eval(f"{cmds[0]}()")
+            storage.save()
             print(new.id)
 
     def do_show(self, args):
@@ -114,9 +115,6 @@ class HBNBCommand(cmd.Cmd):
         Updates an instance
         based on the class name and id
         by adding or updating attribute
-        """
-        """
-        Deletes an instance based on the class name and id
         """
         cmds = shlex.split(args)
         if len(cmds) == 0:

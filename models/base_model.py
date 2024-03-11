@@ -12,6 +12,9 @@ class BaseModel:
         """
         initilizes the BaseModel class
         """
+        self.id = str(uuid4())
+        self.created_at = datetime.utcnow()
+        self.updated_at = datetime.utcnow()
         if kwargs:
             for k in kwargs:
                 if k == "created_at":
@@ -22,10 +25,6 @@ class BaseModel:
                         strptime(kwargs["updated_at"], "%Y-%m-%dT%H:%M:%S.%f")
                 else:
                     self.__dict__[k] = kwargs[k]
-        else:
-            self.id = str(uuid4())
-            self.created_at = datetime.utcnow()
-            self.updated_at = datetime.utcnow()
         models.storage.new(self)
 
     def save(self):
