@@ -14,7 +14,7 @@ class HBNBCommand(cmd.Cmd):
     class for the HBNBC cmd
     """
     prompt = "(hbnb)"
-    Existing = ["BaseModel", "User"]
+    Existing = ["BaseModel", "User", "State", "City", "Amenity", "Place", "Review"]
 
     def do_quit(self, args):
         """
