@@ -2,18 +2,15 @@
 """
 conains the BaseModel class
 """
-from datetime import datetime
 from uuid import uuid4
+from datetime import datetime
+import models
 
 
 class BaseModel:
     def __init__(self, *args, **kwargs):
         """
-        initilizes the BaseModel
-
-        Args:
-            -*args: arguments
-            -**kwargs: key values of args
+        initilizes the BaseModel class
         """
         if kwargs:
             for k in kwargs:
@@ -29,16 +26,18 @@ class BaseModel:
             self.id = str(uuid4())
             self.created_at = datetime.utcnow()
             self.updated_at = datetime.utcnow()
+        models.storage.new(self)
 
     def save(self):
         """
         updates updated_at with the current datetime
         """
         self.updated_at = datetime.utcnow()
+        models.storage.save()
 
     def to_dict(self):
         """
-        returns a dictionary containing:
+        returns a dictionary containing
         all keys/values of __dict__ of the instance
         """
         this_dict = self.__dict__.copy()
