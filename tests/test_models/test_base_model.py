@@ -7,19 +7,31 @@ from models.base_model import BaseModel
 
 
 class TestBaseModel(unittest.TestCase):
+    """
+    tests for the BaseModel class
+    """
     def test_init(self):
+        """
+        tests the __init__ function
+        """
         new_model = BaseModel()
         self.assertIsNotNone(new_model.id)
         self.assertIsNotNone(new_model.created_at)
         self.assertIsNotNone(new_model.updated_at)
 
     def test_save(self):
+        """
+        test the save method
+        """
         new_model = BaseModel()
         first = new_model.updated_at
         second = new_model.save()
         self.assertNotEqual(first, second)
 
     def test_to_dict(self):
+        """
+        test to_dict method
+        """
         new_model = BaseModel()
         new_model_d = new_model.to_dict()
         self.assertIsInstance(new_model_d, dict)
@@ -31,6 +43,9 @@ class TestBaseModel(unittest.TestCase):
                          new_model.updated_at.isoformat())
 
     def test_str(self):
+        """
+        test the __str__ method
+        """
         new_model = BaseModel()
         self.assertTrue(str(new_model).startswith("[BaseModel]"))
         self.assertIn(new_model.id, str(new_model))
