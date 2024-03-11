@@ -127,7 +127,13 @@ class HBNBCommand(cmd.Cmd):
             print("** instance id missing **")
         else:
             k = f"{cmds[0]}.{cmds[1]}"
-            if k in storage.all():
+            if k not in storage.all():
+                print("** no instance found **")
+            elif len(cmds) < 3:
+                print("** attribute name missing **")
+            elif len(cmds) < 4:
+                print("** value missing **")
+            else:
                 name = cmds[2]
                 val = cmds[3]
                 try:
@@ -136,12 +142,6 @@ class HBNBCommand(cmd.Cmd):
                     pass
                 setattr(storage.all()[k], name, val)
                 storage.all()[k].save()
-            elif len(cmds) < 3:
-                print("** attribute name missing **")
-            elif len(cmds) < 4:
-                print("** value missing **")
-            else:
-                print("** no instance found **")
 
 
 if __name__ == "__main__":
