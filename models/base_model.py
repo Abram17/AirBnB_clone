@@ -8,7 +8,7 @@ from uuid import uuid4
 from models import storage
 
 
-class BaseModel:
+class BaseModel():
     """
     defines all common attributes/methods for other classes
     """
