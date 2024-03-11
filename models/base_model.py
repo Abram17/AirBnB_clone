@@ -7,13 +7,23 @@ from datetime import datetime
 
 
 class BaseModel:
-    def __init__(self):
+    def __init__(self, *args, **kwargs):
         """
         initilizes the BaseModel
         """
-        self.id = str(uuid4())
-        self.created_at = datetime.utcnow()
-        self.updated_at = datetime.utcnow()
+        if not kwargs:
+            self.id = str(uuid4())
+            self.created_at = datetime.utcnow()
+            self.updated_at = datetime.utcnow()
+        else:
+            for k, v in kwargs.items():
+                if k == "__class__":
+                    continue
+                elif k == "created_at" | k == "updated_at":
+                    setattr(self, k,
+                            datetime.strptime(v, "%Y-%m-%dT%H:%M:%S.%f"))
+                else:
+                    setattr(self, k, v)
 
     def save(self):
         """
