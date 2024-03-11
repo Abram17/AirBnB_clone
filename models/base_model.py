@@ -2,14 +2,18 @@
 """
 conains the BaseModel class
 """
-from uuid import uuid4
 from datetime import datetime
+from uuid import uuid4
 
 
 class BaseModel:
     def __init__(self, *args, **kwargs):
         """
         initilizes the BaseModel
+
+        Args:
+            -*args: arguments
+            -**kwargs: key values of args
         """
         if kwargs:
             for k in kwargs:
