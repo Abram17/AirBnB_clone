@@ -7,7 +7,7 @@ from models.base_model import BaseModel
 
 
 class TestBaseModel(unittest.TestCase):
-    def Test_init(self):
+    def test_init(self):
         new_model = BaseModel()
         self.assertIsNotNone(new_model.id)
         self.assertIsNotNone(new_model.created_at)
@@ -25,8 +25,8 @@ class TestBaseModel(unittest.TestCase):
         self.assertIsInstance(new_model_d, dict)
         self.assertEqual(new_model_d["__class__"], "BaseModel")
         self.assertEqual(new_model_d["id"], new_model.id)
-        self.assertEqual(new_model_d["created_at"], new_model.created_at)
-        self.assertEqual(new_model_d["updated_at"], new_model.updated_at)
+        self.assertEqual(new_model_d["created_at"], new_model.created_at.isoformat())
+        self.assertEqual(new_model_d["updated_at"], new_model.updated_at.isoformat())
 
     def test_str(self):
         new_model = BaseModel()
