@@ -49,8 +49,7 @@ class HBNBCommand(cmd.Cmd):
                 attr_id = up_attr[0]
                 attr_name = up_attr[1]
                 attr_val = up_attr[2]
-                return methods[func](f"{name} {attr} 
-                                     {attr_id} {attr_name} {attr_val}")
+                return methods[func](f"{name} {attr_id} {attr_name} {attr_val}")
 
     def do_quit(self, args):
         """
