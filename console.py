@@ -7,6 +7,12 @@ import shlex
 from models import storage
 from models.base_model import BaseModel
 from models.user import User
+from models.place import Place
+from models.state import State
+from models.city import City
+from models.amenity import Amenity
+from models.review import Review
+from models.engine.file_storage import FileStorage
 
 
 class HBNBCommand(cmd.Cmd):
@@ -15,6 +21,25 @@ class HBNBCommand(cmd.Cmd):
     """
     prompt = "(hbnb)"
     Existing = ["BaseModel", "User", "State", "City", "Amenity", "Place", "Review"]
+
+    def default(self, args):
+        """
+        ovewrite the default cmd
+        """
+        words = args.split('.')
+        name = words[0]
+        func = words[1].split('(')[0]
+        methods = {
+            'all': self.do_all,
+            'show': self.do_show,
+            'destroy': self.do_destroy,
+            'update': self.do_update
+        }
+        if func not in methods:
+            print(f" **unknown method: {func}** ")
+            return False
+        else:
+            return methods[func](f"{name} {''}")
 
     def do_quit(self, args):
         """
@@ -140,21 +165,6 @@ class HBNBCommand(cmd.Cmd):
                     pass
                 setattr(storage.all()[k], name, val)
                 storage.all()[k].save()
-
-    def do_count(self, args):
-        """
-        retreive the number of instances in a class.
-        """
-        sp = args.split(' ')
-        if not sp[0]:
-            print("** class name missing **")
-        elif sp[0] not in storage.classes():
-            print("** class doesn't exist **")
-        else:
-            num = [
-                k for k in storage.all() if k.startswith(
-                    sp[0] + '.')]
-            print(len(num))
 
 
 if __name__ == "__main__":
