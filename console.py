@@ -17,21 +17,21 @@ from models.review import Review
 from models.engine.file_storage import FileStorage
 
 
-def new_split(args):
+def new_aplit(args):
     """
-    helps the update method by spliting the curly braces
+    Splits curly braces
     """
     se = re.search(r"\{(.*?)\}", args)
 
     if se:
         comma = shlex.split(args[:se.span()[0]])
-        id = [c.strip(",") for c in comma][0]
+        id = [i.strip(",") for i in comma][0]
 
         data = se.group(1)
         try:
             d = ast.literal_eval("{" + data + "}")
         except Exception:
-            print("**  ERROR: Wrong Format **")
+            print("**  invalid format **")
             return
         return id, d
     else:
@@ -46,10 +46,10 @@ def new_split(args):
             except Exception:
                 return id, ""
             try:
-                val = cmds[2]
+                vals = cmds[2]
             except Exception:
                 return id, name
-            return f"{id}", f"{name} {val}"
+            return f"{id}", f"{name} {vals}"
 
 
 class HBNBCommand(cmd.Cmd):
@@ -68,7 +68,6 @@ class HBNBCommand(cmd.Cmd):
         temp = words[1].split('(')
         func = temp[0]
         attr = temp[1].split(')')[0]
-        up_attr = attr.split(',')
         methods = {
             'all': self.do_all,
             'show': self.do_show,
@@ -87,12 +86,11 @@ class HBNBCommand(cmd.Cmd):
                     print("** class name missing **")
                     return
                 try:
-                    i, d = new_split(args)
+                    i, d = new_aplit(attr)
                 except Exception:
                     pass
                 try:
-                    m = methods[func]
-                    return m(f"{name} {i} {d}")
+                    return methods[func](f"{name} {i} {d}")
                 except Exception:
                     pass
 
