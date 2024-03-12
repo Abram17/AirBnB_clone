@@ -28,7 +28,9 @@ class HBNBCommand(cmd.Cmd):
         """
         words = args.split('.')
         name = words[0]
-        func = words[1].split('(')[0]
+        temp = words[1].split('(')
+        func = temp[0]
+        attr = temp[1].split(')')[0]
         methods = {
             'all': self.do_all,
             'show': self.do_show,
@@ -40,7 +42,7 @@ class HBNBCommand(cmd.Cmd):
             print(f" **unknown method: {func}** ")
             return False
         else:
-            return methods[func](f"{name} {''}")
+            return methods[func](f"{name} {attr}")
 
     def do_quit(self, args):
         """
