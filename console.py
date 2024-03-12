@@ -33,7 +33,8 @@ class HBNBCommand(cmd.Cmd):
             'all': self.do_all,
             'show': self.do_show,
             'destroy': self.do_destroy,
-            'update': self.do_update
+            'update': self.do_update,
+            'count': self.do_count
         }
         if func not in methods:
             print(f" **unknown method: {func}** ")
@@ -165,6 +166,25 @@ class HBNBCommand(cmd.Cmd):
                     pass
                 setattr(storage.all()[k], name, val)
                 storage.all()[k].save()
+
+    def do_count(self, args):
+        """
+        retrieve the number of instances of a class
+        """
+        cmds = shlex.split(args)
+        if args:
+            name = cmds[0]
+        num = 0
+        if cmds:
+            if name in self.Existing:
+                for val in storage.all().values():
+                    if val.__class__.__name__ == name:
+                        num += 1
+                print(num)
+            else:
+                print("** class doesn't exist **")
+        else:
+            print("** class name missing **")
 
 
 if __name__ == "__main__":
