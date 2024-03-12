@@ -2,7 +2,9 @@
 """
 contains the entry point of the command interpreter
 """
+import ast
 import cmd
+import re
 import shlex
 from models import storage
 from models.base_model import BaseModel
@@ -13,6 +15,41 @@ from models.city import City
 from models.amenity import Amenity
 from models.review import Review
 from models.engine.file_storage import FileStorage
+
+
+def new_split(args):
+    """
+    helps the update method by spliting the curly braces
+    """
+    se = re.search(r"\{(.*?)\}", args)
+
+    if se:
+        comma = shlex.split(args[:se.span()[0]])
+        id = [c.strip(",") for c in comma][0]
+
+        data = se.group(1)
+        try:
+            d = ast.literal_eval("{" + data + "}")
+        except Exception:
+            print("**  ERROR: Wrong Format **")
+            return
+        return id, d
+    else:
+        cmds = args.split(",")
+        if cmds:
+            try:
+                id = cmds[0]
+            except Exception:
+                return "", ""
+            try:
+                name = cmds[1]
+            except Exception:
+                return id, ""
+            try:
+                val = cmds[2]
+            except Exception:
+                return id, name
+            return f"{id}", f"{name} {val}"
 
 
 class HBNBCommand(cmd.Cmd):
@@ -46,10 +83,18 @@ class HBNBCommand(cmd.Cmd):
             if func != "update":
                 return methods[func](f"{name} {attr}")
             else:
-                attr_id = up_attr[0]
-                attr_name = up_attr[1]
-                attr_val = up_attr[2]
-                return methods[func](f"{name} {attr_id} {attr_name} {attr_val}")
+                if not name:
+                    print("** class name missing **")
+                    return
+                try:
+                    i, d = new_split(args)
+                except Exception:
+                    pass
+                try:
+                    m = methods[func]
+                    return m(f"{name} {i} {d}")
+                except Exception:
+                    pass
 
     def do_quit(self, args):
         """
@@ -167,13 +212,35 @@ class HBNBCommand(cmd.Cmd):
             elif len(cmds) < 4:
                 print("** value missing **")
             else:
-                name = cmds[2]
-                val = cmds[3]
-                try:
-                    val = eval(val)
-                except Exception:
-                    pass
-                setattr(storage.all()[k], name, val)
+                se = re.search(r"\{(.*?)\}", args)
+                if se:
+                    try:
+                        data = se.group(1)
+                        di = ast.literal_eval("{" + data + "}")
+                        names = list(di.keys())
+                        vals = list(di.values())
+                        try:
+                            n1 = names[0]
+                            v1 = vals[0]
+                            setattr(storage.all()[k], n1, v1)
+                        except Exception:
+                            pass
+                        try:
+                            n2 = names[1]
+                            v2 = vals[1]
+                            setattr(storage.all()[k], n2, v2)
+                        except Exception:
+                            pass
+                    except Exception:
+                        pass
+                else:
+                    name = cmds[2]
+                    val = cmds[3]
+                    try:
+                        val = eval(val)
+                    except Exception:
+                        pass
+                    setattr(storage.all()[k], name, val)
                 storage.all()[k].save()
 
     def do_count(self, args):
