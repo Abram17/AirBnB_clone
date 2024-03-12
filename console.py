@@ -31,6 +31,7 @@ class HBNBCommand(cmd.Cmd):
         temp = words[1].split('(')
         func = temp[0]
         attr = temp[1].split(')')[0]
+        up_attr = attr.split(',')
         methods = {
             'all': self.do_all,
             'show': self.do_show,
@@ -42,7 +43,14 @@ class HBNBCommand(cmd.Cmd):
             print(f" **unknown method: {func}** ")
             return False
         else:
-            return methods[func](f"{name} {attr}")
+            if func != "update":
+                return methods[func](f"{name} {attr}")
+            else:
+                attr_id = up_attr[0]
+                attr_name = up_attr[1]
+                attr_val = up_attr[2]
+                return methods[func](f"{name} {attr} 
+                                     {attr_id} {attr_name} {attr_val}")
 
     def do_quit(self, args):
         """
